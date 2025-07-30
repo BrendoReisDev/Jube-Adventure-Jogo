@@ -1,0 +1,31 @@
+# Godot 4+ specific ignores
+# Cache e builds da Godot
+.import/
+.export/
+.mono/
+.godot/
+builds/
+*.import
+*.godot-export
+*.tmp
+
+# Arquivos gerados por exportações
+*.apk
+*.pck
+*.wasm
+*.js
+*.zip
+*.exe
+*.idsig
+*.png.import
+*.svg.import
+index*
+index.*.js
+
+# Arquivos de mídia pesados (opcional)
+*.mp3.import
+*.wav.import
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db

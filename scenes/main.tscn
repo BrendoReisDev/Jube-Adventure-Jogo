@@ -1,0 +1,127 @@
+[gd_scene load_steps=11 format=3 uid="uid://bajqadt5mmf4t"]
+
+[ext_resource type="Script" uid="uid://bwa618ultlryu" path="res://scenes/main.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://bfaei2m1ncxcn" path="res://Img/FundoMar.png" id="2_tbgi4"]
+[ext_resource type="Texture2D" uid="uid://b4aotnmgp3jd1" path="res://Img/areia.png" id="3_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://vl4wbt058e1k" path="res://scenes/player.tscn" id="4_jyhfs"]
+[ext_resource type="FontFile" uid="uid://dhp8k0uyjbyer" path="res://Img/game_over.ttf" id="5_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://cs873843q2cdb" path="res://musica.mp3" id="6_tefeu"]
+[ext_resource type="AudioStream" uid="uid://dfmt0t5cwh5nv" path="res://jump.wav" id="7_o6xl0"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jyhfs"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jyhfs"]
+font = ExtResource("5_tbgi4")
+font_size = 168
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tbgi4"]
+font = ExtResource("5_tbgi4")
+font_size = 228
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0wfyh")
+
+[node name="Background" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0.2, 0.2)
+repeat_size = Vector2(480, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background"]
+position = Vector2(247, 369)
+scale = Vector2(0.475586, 0.488281)
+texture = ExtResource("2_tbgi4")
+
+[node name="PipeContainer" type="Node2D" parent="."]
+
+[node name="Ground" type="Parallax2D" parent="."]
+repeat_size = Vector2(480, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground"]
+position = Vector2(243, 670)
+scale = Vector2(0.469971, 0.317871)
+texture = ExtResource("3_tbgi4")
+
+[node name="Player" parent="." instance=ExtResource("4_jyhfs")]
+position = Vector2(70, 205)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-63, -168)
+offset = Vector2(240, 400)
+limit_top = -400
+limit_bottom = 400
+
+[node name="BoundaryL" type="StaticBody2D" parent="."]
+position = Vector2(0, 663)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryL"]
+position = Vector2(-1, 71)
+shape = SubResource("WorldBoundaryShape2D_jyhfs")
+
+[node name="BoundaryU" type="StaticBody2D" parent="."]
+position = Vector2(0, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryU"]
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_jyhfs")
+
+[node name="PipeTimer" type="Timer" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0"
+label_settings = SubResource("LabelSettings_jyhfs")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -317.0
+offset_top = -191.0
+offset_right = 346.0
+offset_bottom = 202.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Click
+to
+Play"
+label_settings = SubResource("LabelSettings_tbgi4")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BlackOut" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
+
+[node name="GameOverTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_tefeu")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_o6xl0")
+
+[connection signal="died" from="Player" to="." method="_on_player_died"]
+[connection signal="timeout" from="PipeTimer" to="." method="_on_pipe_timer_timeout"]
+[connection signal="timeout" from="GameOverTimer" to="." method="_on_game_over_timer_timeout"]
